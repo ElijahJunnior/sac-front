@@ -9,12 +9,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     <div className="mainContainer">
       <Header />
-      <div className='mainBody'>
+      <main className='mainBody'>
         <Navigation />
         <div className='mainContent'>
           <Component {...pageProps} />
         </div>
-      </div>
+      </main>
     </div >
   )
 
