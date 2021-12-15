@@ -24,7 +24,7 @@ export default function dashboard() {
                     <p>Tempo Médio</p>
                 </div>
             </section>
-            <section>
+            <section className={styles.dataTable}>
                 <h3>Ocorrencias</h3>
                 <table>
                     <thead>
