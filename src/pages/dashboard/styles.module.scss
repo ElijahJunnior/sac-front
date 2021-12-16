@@ -56,6 +56,29 @@
         
         background: var(--white);
         width: 100%;
+        border-collapse: collapse;
+        padding: 0 0.75rem;
+
+        tr{
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        th:first-of-type, td:first-of-type {
+            padding-left: 1.5rem;
+        }
+
+        th:last-of-type, td:last-of-type {
+            padding-right: 1.5rem;
+        }
+
+        th, td {           
+            padding: 0.75rem 0.75rem;
+            text-align: left;
+
+            p:first-of-type{
+                margin-bottom: 0.75rem;
+            }
+        }
     }
 
 }
