@@ -1,6 +1,9 @@
 import styles from './styles.module.scss';
 
 export default function dashboard() {
+
+    let list = new Array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10');
+
     return (
         <main className={styles.container}>
             <section className={styles.pageHeader}>
@@ -24,7 +27,7 @@ export default function dashboard() {
                     <p>Tempo Médio</p>
                 </div>
             </section>
-            <section className={styles.dataTable}>
+            <section className={`${styles.dataTable} ${styles.scrollbar}`}>
                 <h3>Ocorrencias</h3>
                 <table>
                     <thead>
@@ -54,7 +57,41 @@ export default function dashboard() {
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className={styles.tableBody}>
+                        {list.map(item => (
+                            <tr key={item}>
+                                <td>
+                                    <p>19 Nov</p>
+                                    <p>18:22</p>
+                                </td>
+                                <td>
+                                    <p>35:55</p>
+                                    <p>Encaminhado</p>
+                                </td>
+                                <td>
+                                    <p>Normal</p>
+                                    <p>Rataguarda</p>
+                                </td>
+                                <td>
+                                    <p>Serviços</p>
+                                    <p>Reinstalação de Sistema</p>
+                                </td>
+                                <td>
+                                    <p>LR7 COMERCIO DE EMB...</p>
+                                    <span>Paulinho</span>
+                                    <span>21 99999-9999</span>
+                                </td>
+                                <td>
+                                    A cliente solicitou que a GO2 removesse o sistema da ...
+                                </td>
+                                <td>
+                                    9999
+                                </td>
+                                <td>
+                                    <button> ... </button>
+                                </td>
+                            </tr>
+                        ))}
                         <tr>
                             <td>
                                 <p>19 Nov</p>
@@ -154,6 +191,6 @@ export default function dashboard() {
                     </tbody>
                 </table>
             </section>
-        </main>
+        </main >
     )
 }
