@@ -1,19 +1,19 @@
-* { 
-    margin: 0;
-    padding: 0; 
-    box-sizing: border-box;
-}
+// * {
+//     margin: 0;
+//     padding: 0;
+//     box-sizing: border-box;
+// }
 
-:root { 
-    --black: #202020;
-    --white: #FFFFFF;
-    --orange-500: #EA6B21;
-    --orange-600: #AC4911;  
-    --gray-100: #F5F5F5; //old --gray-300
-    --gray-200: #EEEEEE; //old --gray-400
-    --gray-500: #9E9E9E;
-    --gray-800: #424242;
-    // --gray-500: #DCDCDC;
+:root {
+  --black: #202020;
+  --white: #ffffff;
+  --orange-500: #ea6b21;
+  --orange-600: #ac4911;
+  --gray-100: #f5f5f5; //old --gray-300
+  --gray-200: #eeeeee; //old --gray-400
+  --gray-500: #9e9e9e;
+  --gray-800: #424242;
+  // --gray-500: #DCDCDC;
 }
 
 // 400 - regular
@@ -21,54 +21,63 @@
 // 600 - semibold
 // 700 - bold
 
-@media (max-width: 1080px) {
-    html {
-        font-size: 93.75%;
-    }
-}
+// @media (max-width: 1080px) {
+//   html {
+//     font-size: 93.75%;
+//   }
+// }
 
-@media (max-width: 720px) {
-    html {
-        font-size: 87.5%;
-    }
-}
+// @media (max-width: 720px) {
+//   html {
+//     font-size: 87.5%;
+//   }
+// }
 
-body {
-    background: var(--gray-200);
-    color: var(--black);
-}
+// body {
+//   background: var(--gray-200);
+//   color: var(--black);
+// }
 
-h1, h2, h3, h4, h5, h6 {
-    font: 'Poppins', sans-serif;
-}
+// h1,
+// h2,
+// h3,
+// h4,
+// h5,
+// h6 {
+//   font: "Poppins", sans-serif;
+// }
 
-body, input, textarea, select, button {
-    font: 400 1rem 'Poppins', sans-serif;
-}
+// body,
+// input,
+// textarea,
+// select,
+// button {
+//   font: 400 1rem "Poppins", sans-serif;
+// }
 
-button {
-    cursor: pointer;
-}
+// button {
+//   cursor: pointer;
+// }
 
-a {
-    color: inherit;
-    text-decoration: none;
-}
+// a {
+//   color: inherit;
+//   text-decoration: none;
+// }
 
-.mainContainer {
-    display: flex;
-    flex-direction: column;
-}
+// .mainContainer {
+//   display: flex;
+//   flex-direction: column;
+// }
 
-.mainBody {   
-    width: 100%;
-    display: flex;
-    height: calc(100vh - 5rem);
-}
+// .mainBody {
+//   width: 100%;
+//   display: flex;
+//   height: calc(100vh - 5rem);
+// }
 
-.mainContent {
-    padding: 1rem;
-    width: calc(100% - 15rem);
-    overflow-y: scroll;
-    box-shadow: inset 5px 5px 10px rgba(51, 51, 51, 0.30);;
-}
+// .mainContent {
+//   padding: 1rem;
+//   width: calc(100% - 15rem);
+//   overflow-y: scroll;
+//   box-shadow: inset 5px 5px 10px rgba(51, 51, 51, 0.3);
+// }
