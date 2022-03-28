@@ -46,22 +46,91 @@ type PageProps = {
 }
 
 export default function ChakraDeshboard( { ocorrencias } : PageProps) {
+    
+    const headingStyles = {
+        fontWeight: "700", 
+        color: "gray.500", 
+        fontSize:"14px",  
+        lineHeight: "17px" 
+    }
+
     return (
         <>
-            <Heading> 
+            <Heading>
                 Hello World
-            </Heading> 
+            </Heading>
             <VStack spacing="16px">
                 {
                     ocorrencias.map(ocorrencia => (
-                        <Box 
+                        <Flex 
                             key={ocorrencia.id} 
-                            p="16px"
-                            bg="gray.200" borderRadius="16px"
+                            // p="16px"
+                            bg="gray.100" borderRadius="16px"
+                            maxW="1000px"
                         >
-                            <Text>Cliente</Text>
-                            <Heading>{ocorrencia.cliente?.razao_social || "N/A"}</Heading>
-                        </Box>
+                            <Flex>
+                                <Flex flexDir="column">
+                                    <Heading sx={headingStyles}>
+                                        Data
+                                    </Heading>
+                                    <Text>{ocorrencia.data}</Text>
+                                    <Heading sx={headingStyles}>
+                                        Prioridade
+                                    </Heading>
+                                    <Text>{ocorrencia.codigo_prioridade}</Text>
+                                </Flex>
+                                <Flex flexDir="column">                                   
+                                    <Heading sx={headingStyles}>
+                                            Espera
+                                    </Heading>
+                                    <Text>{"2:25"}</Text>
+                                    <Heading sx={headingStyles}>
+                                        Providencias
+                                    </Heading>
+                                    <Text>{2}</Text>
+                                </Flex>
+                                <Flex flexDir="column">
+                                    <Heading sx={headingStyles}>
+                                        Status
+                                    </Heading>
+                                    <Text>{ocorrencia.status}</Text>
+                                    <Heading sx={headingStyles}>
+                                        Técnico
+                                    </Heading>
+                                    <Text>{ocorrencia.usuario_atendendo?.nome || ""}</Text>
+                                </Flex>
+                            </Flex>
+                            <Flex flexDir="column">
+                                <Heading sx={headingStyles}>
+                                    Cliente
+                                </Heading>
+                                <Text>{ocorrencia.cliente?.razao_social || ""}</Text>
+                                <Flex> 
+                                    <Flex flexDir="column">
+                                        <Heading sx={headingStyles}>
+                                            Contato
+                                        </Heading>
+                                        <Text>{ocorrencia.nome_contato}</Text>
+                                    </Flex>
+                                    <Flex flexDir="column">
+                                        <Heading sx={headingStyles}>
+                                            Telefone
+                                        </Heading>
+                                        <Text>{ocorrencia.telefone_contato}</Text>
+                                    </Flex>
+                                </Flex>
+                            </Flex>
+                            <Flex flexDir="column">
+                                    <Heading sx={headingStyles}>
+                                        Categoria
+                                    </Heading>
+                                    <Text>{ocorrencia.descricao_categoria}</Text>
+                                    <Heading sx={headingStyles}>
+                                        Sub-Categoria
+                                    </Heading>
+                                    <Text>{ocorrencia.descricao_sub_categoria}</Text>
+                            </Flex>
+                        </Flex>
                     ))
                 }
             </VStack>
