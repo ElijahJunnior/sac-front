@@ -54,6 +54,22 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
         lineHeight: "17px" 
     }
 
+    const textStyles = {
+        fontWeight: "400", 
+        color: "gray.800", 
+        fontSize: "16px", 
+        fontHeight: "19px"
+    }
+
+    console.log(ocorrencias)
+
+    if (!ocorrencias) {
+        return (
+            <Heading> Error on data loading </Heading>
+        )
+        
+    }
+
     return (
         <>
             <Heading>
@@ -65,58 +81,76 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
                         <Flex 
                             key={ocorrencia.id} 
                             // p="16px"
+                            w="100%" maxW="1000px" px="30px" py="24px"
                             bg="gray.100" borderRadius="16px"
-                            maxW="1000px"
                         >
                             <Flex>
                                 <Flex flexDir="column">
                                     <Heading sx={headingStyles}>
                                         Data
                                     </Heading>
-                                    <Text>{ocorrencia.data}</Text>
+                                    <Text sx={textStyles}>
+                                        {ocorrencia.data}
+                                    </Text>
                                     <Heading sx={headingStyles}>
                                         Prioridade
                                     </Heading>
-                                    <Text>{ocorrencia.codigo_prioridade}</Text>
+                                    <Text sx={textStyles}>
+                                        {ocorrencia.codigo_prioridade}
+                                    </Text>
                                 </Flex>
                                 <Flex flexDir="column">                                   
                                     <Heading sx={headingStyles}>
                                             Espera
                                     </Heading>
-                                    <Text>{"2:25"}</Text>
+                                    <Text sx={textStyles}>
+                                        {"2:25"}
+                                    </Text>
                                     <Heading sx={headingStyles}>
                                         Providencias
                                     </Heading>
-                                    <Text>{2}</Text>
+                                    <Text sx={textStyles}>
+                                        {2}
+                                    </Text>
                                 </Flex>
                                 <Flex flexDir="column">
                                     <Heading sx={headingStyles}>
                                         Status
                                     </Heading>
-                                    <Text>{ocorrencia.status}</Text>
+                                    <Text sx={textStyles}>
+                                        {ocorrencia.status}
+                                    </Text>
                                     <Heading sx={headingStyles}>
                                         Técnico
                                     </Heading>
-                                    <Text>{ocorrencia.usuario_atendendo?.nome || ""}</Text>
+                                    <Text sx={textStyles}>
+                                        {ocorrencia.usuario_atendendo?.nome || ""}
+                                    </Text>
                                 </Flex>
                             </Flex>
                             <Flex flexDir="column">
                                 <Heading sx={headingStyles}>
                                     Cliente
                                 </Heading>
-                                <Text>{ocorrencia.cliente?.razao_social || ""}</Text>
+                                <Text sx={textStyles}>
+                                    {ocorrencia.cliente?.razao_social || ""}
+                                </Text>
                                 <Flex> 
                                     <Flex flexDir="column">
                                         <Heading sx={headingStyles}>
                                             Contato
                                         </Heading>
-                                        <Text>{ocorrencia.nome_contato}</Text>
+                                        <Text sx={textStyles}>
+                                            {ocorrencia.nome_contato}
+                                        </Text>
                                     </Flex>
                                     <Flex flexDir="column">
                                         <Heading sx={headingStyles}>
                                             Telefone
                                         </Heading>
-                                        <Text>{ocorrencia.telefone_contato}</Text>
+                                        <Text sx={textStyles}>
+                                            {ocorrencia.telefone_contato}
+                                        </Text>
                                     </Flex>
                                 </Flex>
                             </Flex>
@@ -124,11 +158,15 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
                                     <Heading sx={headingStyles}>
                                         Categoria
                                     </Heading>
-                                    <Text>{ocorrencia.descricao_categoria}</Text>
+                                    <Text sx={textStyles}>
+                                        {ocorrencia.descricao_categoria}
+                                    </Text>
                                     <Heading sx={headingStyles}>
                                         Sub-Categoria
                                     </Heading>
-                                    <Text>{ocorrencia.descricao_sub_categoria}</Text>
+                                    <Text sx={textStyles}>
+                                        {ocorrencia.descricao_sub_categoria
+                                    }</Text>
                             </Flex>
                         </Flex>
                     ))
