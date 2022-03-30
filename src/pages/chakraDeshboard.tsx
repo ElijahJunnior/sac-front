@@ -1,7 +1,6 @@
 import { Box, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
-import { execOnce } from "next/dist/shared/lib/utils";
-import { resourceUsage } from "process";
+import { CapitalizeFirstLetter } from "../utils/CapitalizeFirstLetter";
 
 export type Ocorrencia =   {
     id: string, 
@@ -60,8 +59,6 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
         fontSize: "16px", 
         fontHeight: "19px"
     }
-
-    console.log(ocorrencias)
 
     if (!ocorrencias) {
         return (
@@ -178,15 +175,57 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
  
-    const data = await fetch("http://localhost:3030/ocorrencia/ListarAbertas").then(
+    const data: Ocorrencia[] = await fetch("http://localhost:3030/ocorrencia/ListarAbertas").then(
         (res: Response) => {
             return res.json()
         }
     )
+
+    const result = data.reduce((acc, cur) => {
+
+        cur.descricao = CapitalizeFirstLetter(cur.descricao)
+        cur.descricao_categoria = CapitalizeFirstLetter(cur.descricao_categoria)
+        cur.descricao_sub_categoria = CapitalizeFirstLetter(cur.descricao_sub_categoria)
+        cur.descricao_tipo_atendimento = CapitalizeFirstLetter(cur.descricao_tipo_atendimento)
+        cur.nome_contato = CapitalizeFirstLetter(cur.nome_contato)
+        cur.nome_sistema = CapitalizeFirstLetter(cur.nome_sistema)
+
+        if (!!cur.cliente) { 
+            cur.cliente.razao_social = CapitalizeFirstLetter(
+                cur.cliente.razao_social, "all-line"
+            )
+            cur.cliente.nome_fantasia = CapitalizeFirstLetter(
+                cur.cliente.nome_fantasia, "all-line"
+            )
+        }
+
+        if (!!cur.ultimo_usuario) { 
+            cur.ultimo_usuario.nome = CapitalizeFirstLetter(
+                cur.ultimo_usuario.nome, "all-line"
+            )
+        }
+
+        if (!!cur.usuario) { 
+            cur.usuario.nome = CapitalizeFirstLetter(
+                cur.usuario.nome, "all-line"
+            )
+        }
+
+        if (!!cur.usuario_atendendo) { 
+            cur.usuario_atendendo.nome = CapitalizeFirstLetter(
+                cur.usuario_atendendo.nome, "all-line"
+            )
+        }
+
+        acc.push(cur)
+
+        return acc
+
+    }, [] as Ocorrencia[])
  
     return {
         props: {
-            ocorrencias: data
+            ocorrencias: result
         }, 
     }
 }
