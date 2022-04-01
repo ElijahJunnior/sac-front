@@ -2,10 +2,15 @@ import { Box, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import { CapitalizeFirstLetter } from "../utils/CapitalizeFirstLetter";
 
+// DATE FNS
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
+
 export type Ocorrencia =   {
     id: string, 
     data: string, 
     hora: string, 
+    data_formatada: string, 
     descricao: string, 
     codigo_prioridade: string, 
     status: string, 
@@ -87,7 +92,7 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
                                         Data
                                     </Heading>
                                     <Text sx={textStyles}>
-                                        {ocorrencia.data}
+                                        {ocorrencia.data_formatada}
                                     </Text>
                                     <Heading sx={headingStyles}>
                                         Prioridade
@@ -162,8 +167,8 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
                                         Sub-Categoria
                                     </Heading>
                                     <Text sx={textStyles}>
-                                        {ocorrencia.descricao_sub_categoria
-                                    }</Text>
+                                        {ocorrencia.descricao_sub_categoria}
+                                    </Text>
                             </Flex>
                         </Flex>
                     ))
@@ -175,7 +180,7 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
  
-    const data: Ocorrencia[] = await fetch("http://localhost:3030/ocorrencia/ListarAbertas").then(
+    const data = await fetch("http://localhost:3030/ocorrencia/ListarAbertas").then(
         (res: Response) => {
             return res.json()
         }
@@ -189,6 +194,27 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
         cur.descricao_tipo_atendimento = CapitalizeFirstLetter(cur.descricao_tipo_atendimento)
         cur.nome_contato = CapitalizeFirstLetter(cur.nome_contato)
         cur.nome_sistema = CapitalizeFirstLetter(cur.nome_sistema)
+        
+        if (!!cur.data && cur.hora) {            
+            
+            const hora = Number(cur.hora.substring(0, Math.min(cur.hora.length, 2)));
+            const minutos = Number(cur.hora.substring(3, Math.min(cur.hora.length, 5)));
+            const data = new Date(cur.data);           
+            
+            data.setHours(hora, minutos);
+
+            cur.data_formatada = format(
+                data, 
+                "dd MMM, HH:mm", {
+                    locale: ptBR
+                }
+            )
+
+            cur.data_formatada = CapitalizeFirstLetter(
+                cur.data_formatada, "all-line"
+            )
+
+        }
 
         if (!!cur.cliente) { 
             cur.cliente.razao_social = CapitalizeFirstLetter(
@@ -221,7 +247,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
 
         return acc
 
-    }, [] as Ocorrencia[])
+    }, [] as Partial<Ocorrencia>[])
  
     return {
         props: {
