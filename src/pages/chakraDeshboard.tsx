@@ -3,17 +3,19 @@ import { GetServerSideProps } from "next";
 import { CapitalizeFirstLetter } from "../utils/CapitalizeFirstLetter";
 
 // DATE FNS
-import { format } from 'date-fns';
+import { format, Duration, differenceInMinutes, formatDuration } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
 export type Ocorrencia =   {
     id: string, 
     data: string, 
-    hora: string, 
     data_formatada: string, 
+    hora: string,
+    espera: string,  
     descricao: string, 
     codigo_prioridade: string, 
     status: string, 
+    descricao_status: string, 
     nome_contato: string, 
     telefone_contato: string, 
     em_atendimento: string, 
@@ -106,7 +108,7 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
                                             Espera
                                     </Heading>
                                     <Text sx={textStyles}>
-                                        {"2:25"}
+                                        {ocorrencia.espera}
                                     </Text>
                                     <Heading sx={headingStyles}>
                                         Providencias
@@ -120,7 +122,7 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
                                         Status
                                     </Heading>
                                     <Text sx={textStyles}>
-                                        {ocorrencia.status}
+                                        {ocorrencia.descricao_status}
                                     </Text>
                                     <Heading sx={headingStyles}>
                                         Técnico
@@ -186,7 +188,25 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
         }
     )
 
-    const result = data.reduce((acc, cur) => {
+    function handleOccurrenceStatus(ocorrence: Ocorrencia) {
+
+        if (ocorrence.em_atendimento === "A") {
+            return "Em Atendimento"
+        } else if (ocorrence.em_atendimento === "E") {
+            return "Em Espera"
+        } else if (ocorrence.ultimo_tipo_ocorrencia === "E") { 
+            return "Encaminhada"
+        } else if (ocorrence.status === "A" ){
+            return "Aberta"
+        } else if (ocorrence.status === "F" ) { 
+            return "Fechada"
+        } else {
+            return ""
+        }
+
+    }
+ 
+    const result = data?.reduce((acc, cur) => {
 
         cur.descricao = CapitalizeFirstLetter(cur.descricao)
         cur.descricao_categoria = CapitalizeFirstLetter(cur.descricao_categoria)
@@ -194,15 +214,16 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
         cur.descricao_tipo_atendimento = CapitalizeFirstLetter(cur.descricao_tipo_atendimento)
         cur.nome_contato = CapitalizeFirstLetter(cur.nome_contato)
         cur.nome_sistema = CapitalizeFirstLetter(cur.nome_sistema)
+        cur.descricao_status = handleOccurrenceStatus(cur)
         
         if (!!cur.data && cur.hora) {            
             
             const hora = Number(cur.hora.substring(0, Math.min(cur.hora.length, 2)));
             const minutos = Number(cur.hora.substring(3, Math.min(cur.hora.length, 5)));
             const data = new Date(cur.data);           
+            const intervalo = differenceInMinutes(new Date(), data)
             
             data.setHours(hora, minutos);
-
             cur.data_formatada = format(
                 data, 
                 "dd MMM, HH:mm", {
@@ -213,6 +234,10 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
             cur.data_formatada = CapitalizeFirstLetter(
                 cur.data_formatada, "all-line"
             )
+
+            cur.espera = 
+                Math.floor(intervalo / 60).toString() + 
+                ":" + (intervalo% 60).toString()
 
         }
 
