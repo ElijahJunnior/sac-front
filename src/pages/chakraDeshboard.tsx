@@ -13,7 +13,8 @@ export type Ocorrencia =   {
     hora: string,
     espera: string,  
     descricao: string, 
-    codigo_prioridade: string, 
+    codigo_prioridade: string,
+    descricao_prioridade: string, 
     status: string, 
     descricao_status: string, 
     nome_contato: string, 
@@ -88,28 +89,56 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
                             w="100%" maxW="1000px" px="30px" py="24px"
                             bg="gray.100" borderRadius="16px"
                         >
-                            <Flex>
-                                <Flex flexDir="column">
-                                    <Heading sx={headingStyles}>
-                                        Data
-                                    </Heading>
-                                    <Text sx={textStyles}>
-                                        {ocorrencia.data_formatada}
-                                    </Text>
-                                    <Heading sx={headingStyles}>
-                                        Prioridade
-                                    </Heading>
-                                    <Text sx={textStyles}>
-                                        {ocorrencia.codigo_prioridade}
-                                    </Text>
+                            <Flex flexDir={"column"} bg="red.100">
+                                <Flex flexDir={"row"} bg="green.100" w="250px">
+                                    <Flex 
+                                        flexDir={"column"} w="108px"
+                                        bg="purple.100" 
+                                    >
+                                        <Heading sx={headingStyles} w="108px">
+                                            Data
+                                        </Heading>
+                                        <Text sx={textStyles} mt="5px" ml="5px" >
+                                            {ocorrencia.data_formatada}
+                                        </Text>
+                                    </Flex>
+                                    <Flex 
+                                        flexDir={"column"} w="75px" ml="20px"
+                                        bg="orange.100" 
+                                    >
+                                        <Heading sx={headingStyles}>
+                                            Prioridade
+                                        </Heading>
+                                        <Text sx={textStyles} mt="5px" ml="5px">
+                                            {ocorrencia.descricao_prioridade}
+                                        </Text>
+                                    </Flex>
+                                </Flex>
+                                <Flex flexDir={"row"} bg="green.100" w="250px" h="36px">
+                                    <Flex 
+                                        flexDir={"column"} w="175px" h="35px"
+                                        bg="blue.100" 
+                                    >
+                                        <Heading sx={headingStyles}>
+                                            Espera
+                                        </Heading>
+                                        <Text sx={textStyles}>
+                                            {ocorrencia.espera}
+                                        </Text>
+                                    </Flex>
+                                    <Flex flexDir={"column"} bg="gray.100" w="75px" h="35px">
+
+                                    </Flex>
+                                </Flex>                                {/* <Flex flexDir="column" bg="green.100">
+                                    <Flex flexDir="column">
+
+                                    </Flex>
+                                    <Flex flexDir="column">
+
+                                    </Flex>
                                 </Flex>
                                 <Flex flexDir="column">                                   
-                                    <Heading sx={headingStyles}>
-                                            Espera
-                                    </Heading>
-                                    <Text sx={textStyles}>
-                                        {ocorrencia.espera}
-                                    </Text>
+
                                     <Heading sx={headingStyles}>
                                         Providencias
                                     </Heading>
@@ -130,7 +159,7 @@ export default function ChakraDeshboard( { ocorrencias } : PageProps) {
                                     <Text sx={textStyles}>
                                         {ocorrencia.usuario_atendendo?.nome || ""}
                                     </Text>
-                                </Flex>
+                                </Flex> */}
                             </Flex>
                             <Flex flexDir="column">
                                 <Heading sx={headingStyles}>
@@ -205,6 +234,23 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
         }
 
     }
+
+    function handlePriority(ocorrence: Ocorrencia) {
+
+        switch (ocorrence.codigo_prioridade) {
+            case "B":
+                return "Baixa"
+            case "N":
+                return "Normal"
+            case "A":
+                return "Alta"
+            case "C":
+                return "Crítica"
+            default:
+                return ""
+        }
+
+    }
  
     const result = data?.reduce((acc, cur) => {
 
@@ -215,6 +261,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
         cur.nome_contato = CapitalizeFirstLetter(cur.nome_contato)
         cur.nome_sistema = CapitalizeFirstLetter(cur.nome_sistema)
         cur.descricao_status = handleOccurrenceStatus(cur)
+        cur.descricao_prioridade = handlePriority(cur)
         
         if (!!cur.data && cur.hora) {            
             
