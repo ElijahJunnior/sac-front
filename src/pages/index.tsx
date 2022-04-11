@@ -91,7 +91,7 @@ export default function Home( { ocorrencias } : PageProps) {
               >
                 <Flex 
                   flexDir={"column"} w="108px"
-                  bg="purple.100" 
+                //   bg="purple.100" 
                 >
                   <Heading sx={headingStyles}>
                     Data
@@ -108,7 +108,7 @@ export default function Home( { ocorrencias } : PageProps) {
                 </Flex>
                 <Flex 
                   flexDir={"column"} w="90" ml="20px"
-                  bg="orange.100" 
+                //   bg="orange.100" 
                 >
                   <Heading sx={headingStyles}>
                     Prioridade
@@ -125,7 +125,7 @@ export default function Home( { ocorrencias } : PageProps) {
                 </Flex>
                 <Flex 
                   flexDir={"column"} w="135px" ml="20px" 
-                  bg="blue.100" 
+                //   bg="blue.100" 
                 >
                   <Heading sx={headingStyles}>
                       Status
@@ -136,47 +136,55 @@ export default function Home( { ocorrencias } : PageProps) {
                   <Heading sx={headingStyles} mt="10px">
                       Técnico
                   </Heading>
-                  <Text sx={textStyles} mt="5px" ml="5px">
+                  <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
                       {ocorrencia.usuario_atendendo?.nome || ""}
                   </Text>
                 </Flex>
-                <Flex flexDir="column">
+                <Flex 
+                    flexDir="column" w="280px" ml="20px"
+                    // bg="yellow.100"
+                >
                     <Heading sx={headingStyles}>
                         Cliente
                     </Heading>
-                    <Text sx={textStyles}>
-                        {ocorrencia.cliente?.razao_social || ""}
+                    <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
+                        {ocorrencia.cliente?.razao_social || "Não Encontrado"}
                     </Text>
-                    <Flex> 
-                        <Flex flexDir="column">
+                    <Flex mt="10px"
+                        // bg="red.100"
+                    > 
+                        <Flex flexDir="column" w="105px">
                             <Heading sx={headingStyles}>
                                 Contato
                             </Heading>
-                            <Text sx={textStyles}>
+                            <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
                                 {ocorrencia.nome_contato}
                             </Text>
                         </Flex>
-                        <Flex flexDir="column">
+                        <Flex flexDir="column" w="155px">
                             <Heading sx={headingStyles}>
                                 Telefone
                             </Heading>
-                            <Text sx={textStyles}>
+                            <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
                                 {ocorrencia.telefone_contato}
                             </Text>
                         </Flex>
                     </Flex>
                 </Flex>
-                <Flex flexDir="column">
+                <Flex 
+                    flexDir="column" w="240px" ml="20px"
+                    // bg="green.100"
+                >
                         <Heading sx={headingStyles}>
                             Categoria
                         </Heading>
-                        <Text sx={textStyles}>
+                        <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
                             {ocorrencia.descricao_categoria}
                         </Text>
-                        <Heading sx={headingStyles}>
+                        <Heading sx={headingStyles} mt="10px">
                             Sub-Categoria
                         </Heading>
-                        <Text sx={textStyles}>
+                        <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
                             {ocorrencia.descricao_sub_categoria}
                         </Text>
                 </Flex>
