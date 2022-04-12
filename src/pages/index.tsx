@@ -5,6 +5,8 @@ import { CapitalizeFirstLetter } from "../utils/CapitalizeFirstLetter";
 // DATE FNS
 import { format, Duration, differenceInMinutes, formatDuration } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+import { ItemColumn } from "../components/Dashboard/ItemColumn";
+import { ItemLine } from "../components/Dashboard/ItemLine";
 
 export type Ocorrencia =   {
     id: string, 
@@ -80,7 +82,7 @@ export default function Home( { ocorrencias } : PageProps) {
       <Heading>
           Hello World
       </Heading>
-      <VStack spacing="16px">
+      <VStack spacing="32px">
           {
             ocorrencias.map(ocorrencia => (
               <Flex 
@@ -88,24 +90,12 @@ export default function Home( { ocorrencias } : PageProps) {
                 // p="16px"
                 w="100%" maxW="1000px" px="30px" py="24px"
                 bg="gray.100" borderRadius="16px"
+                boxShadow="0px 0px 15px 5px rgba(0, 0, 0, 0.1), 5px 5px 10px 1px rgba(0, 0, 0, 0.15);"
               >
-                <Flex 
-                  flexDir={"column"} w="108px"
-                //   bg="purple.100" 
-                >
-                  <Heading sx={headingStyles}>
-                    Data
-                  </Heading>
-                  <Text sx={textStyles} mt="5px" ml="5px" >
-                    {ocorrencia.data_formatada}
-                  </Text>
-                  <Heading sx={headingStyles} mt="10px">
-                    Espera
-                  </Heading>
-                  <Text sx={textStyles} mt="5px" ml="5px" >
-                    {ocorrencia.espera}
-                  </Text>
-                </Flex>
+                <ItemColumn>
+                    <ItemLine title="Data" value={ocorrencia.data_formatada} />
+                    <ItemLine title="Espera" value={ocorrencia.espera} mt="10px" />
+                </ItemColumn>
                 <Flex 
                   flexDir={"column"} w="90" ml="20px"
                 //   bg="orange.100" 
@@ -141,7 +131,7 @@ export default function Home( { ocorrencias } : PageProps) {
                   </Text>
                 </Flex>
                 <Flex 
-                    flexDir="column" w="280px" ml="20px"
+                    flexDir="column" w="275px" ml="20px"
                     // bg="yellow.100"
                 >
                     <Heading sx={headingStyles}>
@@ -161,7 +151,7 @@ export default function Home( { ocorrencias } : PageProps) {
                                 {ocorrencia.nome_contato}
                             </Text>
                         </Flex>
-                        <Flex flexDir="column" w="155px">
+                        <Flex flexDir="column" w="150px">
                             <Heading sx={headingStyles}>
                                 Telefone
                             </Heading>
@@ -172,7 +162,7 @@ export default function Home( { ocorrencias } : PageProps) {
                     </Flex>
                 </Flex>
                 <Flex 
-                    flexDir="column" w="240px" ml="20px"
+                    flexDir="column" w="230px" ml="20px"
                     // bg="green.100"
                 >
                         <Heading sx={headingStyles}>
@@ -221,6 +211,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
       }
 
   }
+
+  console.log('aqui');
 
   function handlePriority(ocorrence: Ocorrencia) {
 
@@ -311,6 +303,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
         }
 
         acc.push(cur)
+
+        console.log('recarregar')
 
         return acc
 
