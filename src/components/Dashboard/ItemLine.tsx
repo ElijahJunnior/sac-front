@@ -10,23 +10,26 @@ export function ItemLine({ title, value, ...rest }: ItemLineProps) {
 
   return ( 
 
-    <Flex
-      flexDir={"column"} w="120px" {...rest}
-    //   bg="purple.100" 
-    >
+    // <Flex
+    //   flexDir={"column"} w="120px"
+    // //   bg="purple.100" 
+    // >
+    <>
       <Heading 
         color="gray.500" fontWeight="700"
         fontSize="14px" lineHeight="17px"
+        {...rest}
       >
           {title}
       </Heading>
       <Text 
         mt="5px" ml="5px" color="gray.800" 
-        fontWeight="400" fontSize="16px" lineHeight="19px" 
+        fontWeight="400" fontSize="16px" lineHeight="19px" noOfLines={1}
       >
         {value}
       </Text>
-    </Flex>
+    </>
+    // </Flex>
 
   )
 }

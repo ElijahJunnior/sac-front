@@ -1,81 +1,23 @@
-import { Box, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
-import { CapitalizeFirstLetter } from "../utils/CapitalizeFirstLetter";
+import { BiDotsHorizontalRounded } from 'react-icons/bi';
 
-// DATE FNS
-import { format, Duration, differenceInMinutes, formatDuration } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
+// COMPONENTS
 import { ItemColumn } from "../components/Dashboard/ItemColumn";
 import { ItemLine } from "../components/Dashboard/ItemLine";
-
-export type Ocorrencia =   {
-    id: string, 
-    data: string, 
-    data_formatada: string, 
-    hora: string,
-    espera: string,  
-    descricao: string, 
-    codigo_prioridade: string,
-    descricao_prioridade: string, 
-    status: string, 
-    descricao_status: string, 
-    nome_contato: string, 
-    telefone_contato: string, 
-    em_atendimento: string, 
-    nome_sistema: string, 
-    descricao_tipo_atendimento: string, 
-    descricao_categoria: string, 
-    descricao_sub_categoria: string, 
-    ultimo_tipo_ocorrencia: string, 
-    ultima_data: string, 
-    ultima_hora: string, 
-    cliente?: {
-      id: string
-      razao_social: string
-      nome_fantasia: string
-      cpf_cnpj: string
-      perfil: string
-    },
-    usuario?: {
-      id: string,
-      nome: string
-    },
-    ultimo_usuario?: {
-        id: string,
-        nome: string
-    },
-    usuario_atendendo?: {
-        id: string,
-        nome: string
-    }
-}
+import { Ocorrencia, GetOcorrencias } from "../services/Ocorrencias";
 
 type PageProps = {
-    ocorrencias: Ocorrencia[]
+  ocorrencias: Partial<Ocorrencia>[]
 }
 
 export default function Home( { ocorrencias } : PageProps) {
-    
-    const headingStyles = {
-        fontWeight: "700", 
-        color: "gray.500", 
-        fontSize:"14px",  
-        lineHeight: "17px" 
-    }
 
-    const textStyles = {
-        fontWeight: "400", 
-        color: "gray.800", 
-        fontSize: "16px", 
-        fontHeight: "19px"
-    }
-
-    if (!ocorrencias) {
-        return (
-            <Heading> Error on data loading </Heading>
-        )
-        
-    }
+  if (!ocorrencias) {
+    return (
+      <Heading> Error on data loading </Heading>
+    )
+  }
 
   return (
     <>
@@ -83,104 +25,58 @@ export default function Home( { ocorrencias } : PageProps) {
           Hello World
       </Heading>
       <VStack spacing="32px">
-          {
-            ocorrencias.map(ocorrencia => (
-              <Flex 
-                key={ocorrencia.id} 
-                // p="16px"
-                w="100%" maxW="1000px" px="30px" py="24px"
-                bg="gray.100" borderRadius="16px"
-                boxShadow="0px 0px 15px 5px rgba(0, 0, 0, 0.1), 5px 5px 10px 1px rgba(0, 0, 0, 0.15);"
-              >
-                <ItemColumn>
-                    <ItemLine title="Data" value={ocorrencia.data_formatada} />
-                    <ItemLine title="Espera" value={ocorrencia.espera} mt="10px" />
-                </ItemColumn>
-                <Flex 
-                  flexDir={"column"} w="90" ml="20px"
-                //   bg="orange.100" 
-                >
-                  <Heading sx={headingStyles}>
-                    Prioridade
-                  </Heading>
-                  <Text sx={textStyles} mt="5px" ml="5px">
-                    {ocorrencia.descricao_prioridade}
-                  </Text>
-                  <Heading sx={headingStyles} mt="10px">
-                    Providencias
-                  </Heading>
-                  <Text sx={textStyles} mt="5px" ml="5px">
-                    {2}
-                  </Text>
+        {
+          ocorrencias.map(ocorrencia => (
+            <Flex 
+              key={ocorrencia.id} 
+              w="100%" maxW="1000px" px="30px" py="24px" position="relative" 
+              bg="gray.100" borderRadius="16px"
+              boxShadow="0px 0px 15px 5px rgba(0, 0, 0, 0.1), 5px 5px 10px 1px rgba(0, 0, 0, 0.15);"
+            >
+              <ItemColumn w="120px" >
+                <ItemLine title="Data" value={ocorrencia.data_formatada} />
+                <ItemLine title="Espera" value={ocorrencia.espera} mt="10px" />
+              </ItemColumn>
+              <ItemColumn w="90px" ml="20px">
+                <ItemLine title="Prioridade" value={ocorrencia.descricao_prioridade} />
+                <ItemLine title="Providencias" value={(2).toString()} mt="10px" />
+              </ItemColumn>
+              <ItemColumn w="135px" ml="20px">
+                <ItemLine title="Status" value={ocorrencia.descricao_status} />
+                <ItemLine title="Técnico" value={ocorrencia.usuario_atendendo?.nome || ""} mt="10px" />
+              </ItemColumn>
+              <ItemColumn w="275px" ml="20px">
+                <ItemLine title="Cliente" value={ocorrencia.cliente?.razao_social || "Não Encontrado"} />
+                <Flex mt="10px"> 
+                  <Flex flexDir="column" w="105px">
+                    <ItemLine title="Contato" value={ocorrencia.nome_contato} />
+                  </Flex>
+                  <Flex flexDir="column" w="150px">
+                    <ItemLine title="Telefone" value={ocorrencia.telefone_contato} />
+                  </Flex>
                 </Flex>
-                <Flex 
-                  flexDir={"column"} w="135px" ml="20px" 
-                //   bg="blue.100" 
+              </ItemColumn>
+              <ItemColumn w="230px" ml="20px">
+                <ItemLine title="Categoria" value={ocorrencia.descricao_categoria} />
+                <ItemLine title="Sub-Categoria" value={ocorrencia.descricao_sub_categoria} mt="10px" />
+              </ItemColumn>
+              <Flex
+                  h='30px' w='30px' align="center" justify="center"
+                  position="absolute" bottom="15px" right="15px"
+                  as='button' outline="none"
+                  bg="orange.500" color='gray.300'
+                  fontSize="22px" borderRadius='8px' border="none"
+                  boxShadow=" 0px 0px 2px 1px rgba(0, 0, 0, 0.20), 2px 3px 5px rgba(0, 0, 0, 0.25);"
+                  transition='all 0.2s cubic-bezier(.08,.52,.52,1)'
+                  // _focus={{ color: "orange.400" }}
+                  _hover={{ bg: "orange.600", color: "gray.300" }}
+                  _active={{ transform: 'scale(1.2)' }}
                 >
-                  <Heading sx={headingStyles}>
-                      Status
-                  </Heading>
-                  <Text sx={textStyles} mt="5px" ml="5px">
-                      {ocorrencia.descricao_status}
-                  </Text>
-                  <Heading sx={headingStyles} mt="10px">
-                      Técnico
-                  </Heading>
-                  <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
-                      {ocorrencia.usuario_atendendo?.nome || ""}
-                  </Text>
-                </Flex>
-                <Flex 
-                    flexDir="column" w="275px" ml="20px"
-                    // bg="yellow.100"
-                >
-                    <Heading sx={headingStyles}>
-                        Cliente
-                    </Heading>
-                    <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
-                        {ocorrencia.cliente?.razao_social || "Não Encontrado"}
-                    </Text>
-                    <Flex mt="10px"
-                        // bg="red.100"
-                    > 
-                        <Flex flexDir="column" w="105px">
-                            <Heading sx={headingStyles}>
-                                Contato
-                            </Heading>
-                            <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
-                                {ocorrencia.nome_contato}
-                            </Text>
-                        </Flex>
-                        <Flex flexDir="column" w="150px">
-                            <Heading sx={headingStyles}>
-                                Telefone
-                            </Heading>
-                            <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
-                                {ocorrencia.telefone_contato}
-                            </Text>
-                        </Flex>
-                    </Flex>
-                </Flex>
-                <Flex 
-                    flexDir="column" w="230px" ml="20px"
-                    // bg="green.100"
-                >
-                        <Heading sx={headingStyles}>
-                            Categoria
-                        </Heading>
-                        <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
-                            {ocorrencia.descricao_categoria}
-                        </Text>
-                        <Heading sx={headingStyles} mt="10px">
-                            Sub-Categoria
-                        </Heading>
-                        <Text sx={textStyles} mt="5px" ml="5px" noOfLines={1}>
-                            {ocorrencia.descricao_sub_categoria}
-                        </Text>
-                </Flex>
+                  <BiDotsHorizontalRounded />
               </Flex>
-            ))
-          }
+            </Flex>
+          ))
+        }
       </VStack>
     </>
   )
@@ -188,131 +84,12 @@ export default function Home( { ocorrencias } : PageProps) {
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
 
-  const data = await fetch("http://localhost:3030/ocorrencia/ListarAbertas").then(
-      (res: Response) => {
-          return res.json()
-      }
-  )
+  const ocorrencias = await GetOcorrencias();
 
-  function handleOccurrenceStatus(ocorrence: Ocorrencia) {
-
-      if (ocorrence.em_atendimento === "A") {
-          return "Em Atendimento"
-      } else if (ocorrence.em_atendimento === "E") {
-          return "Em Espera"
-      } else if (ocorrence.ultimo_tipo_ocorrencia === "E") { 
-          return "Encaminhada"
-      } else if (ocorrence.status === "A" ){
-          return "Aberta"
-      } else if (ocorrence.status === "F" ) { 
-          return "Fechada"
-      } else {
-          return ""
-      }
-
+  return {
+    props: {
+      ocorrencias
+    }, 
   }
 
-  console.log('aqui');
-
-  function handlePriority(ocorrence: Ocorrencia) {
-
-      switch (ocorrence.codigo_prioridade) {
-          case "B":
-              return "Baixa"
-          case "N":
-              return "Normal"
-          case "A":
-              return "Alta"
-          case "C":
-              return "Crítica"
-          default:
-              return ""
-      }
-
-    }
-
-    if (!data) {
-      return {
-        props: {
-          ocorrencias: []
-        }
-      }
-    }
- 
-    const result = data?.reduce((acc, cur) => {
-
-        cur.descricao = CapitalizeFirstLetter(cur.descricao)
-        cur.descricao_categoria = CapitalizeFirstLetter(cur.descricao_categoria)
-        cur.descricao_sub_categoria = CapitalizeFirstLetter(cur.descricao_sub_categoria)
-        cur.descricao_tipo_atendimento = CapitalizeFirstLetter(cur.descricao_tipo_atendimento)
-        cur.nome_contato = CapitalizeFirstLetter(cur.nome_contato)
-        cur.nome_sistema = CapitalizeFirstLetter(cur.nome_sistema)
-        cur.descricao_status = handleOccurrenceStatus(cur)
-        cur.descricao_prioridade = handlePriority(cur)
-        
-        if (!!cur.data && cur.hora) {            
-            
-            const hora = Number(cur.hora.substring(0, Math.min(cur.hora.length, 2)));
-            const minutos = Number(cur.hora.substring(3, Math.min(cur.hora.length, 5)));
-            const data = new Date(cur.data);           
-            const intervalo = differenceInMinutes(new Date(), data)
-            
-            data.setHours(hora, minutos);
-            cur.data_formatada = format(
-                data, 
-                "dd MMM, HH:mm", {
-                    locale: ptBR
-                }
-            )
-
-            cur.data_formatada = CapitalizeFirstLetter(
-                cur.data_formatada, "all-line"
-            )
-
-            cur.espera = 
-                Math.floor(intervalo / 60).toString() + 
-                ":" + (intervalo% 60).toString().padStart(2, "0")
-
-        }
-
-        if (!!cur.cliente) { 
-            cur.cliente.razao_social = CapitalizeFirstLetter(
-                cur.cliente.razao_social, "all-line"
-            )
-            cur.cliente.nome_fantasia = CapitalizeFirstLetter(
-                cur.cliente.nome_fantasia, "all-line"
-            )
-        }
-
-        if (!!cur.ultimo_usuario) { 
-            cur.ultimo_usuario.nome = CapitalizeFirstLetter(
-                cur.ultimo_usuario.nome, "all-line"
-            )
-        }
-
-        if (!!cur.usuario) { 
-            cur.usuario.nome = CapitalizeFirstLetter(
-                cur.usuario.nome, "all-line"
-            )
-        }
-
-        if (!!cur.usuario_atendendo) { 
-            cur.usuario_atendendo.nome = CapitalizeFirstLetter(
-                cur.usuario_atendendo.nome, "all-line"
-            )
-        }
-
-        acc.push(cur)
-
-        console.log('recarregar')
-
-        return acc
-
-    }, [] as Partial<Ocorrencia>[])
- 
-    return {
-        props: {
-            ocorrencias: result
-        }, 
-    }
 }
