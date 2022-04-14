@@ -6,21 +6,24 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from '../styles/theme';
 
 import '../styles/global.scss';
+import { AuthProvider } from '../contexts/AuthContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
 
   return (
-    <ChakraProvider theme={theme} >
-        {/* <div className="mainContainer"> */}
-          {/* <Header /> */}
-          {/* <main className='mainBody'> */}
-            {/* <Navigation /> */}
-            {/* <div className='mainContent'> */}
-              <Component {...pageProps} />
-            {/* </div> */}
-          {/* </main> */}
-        {/* </div > */}
-    </ChakraProvider>
+    <AuthProvider>
+      <ChakraProvider theme={theme} >
+          {/* <div className="mainContainer"> */}
+            {/* <Header /> */}
+            {/* <main className='mainBody'> */}
+              {/* <Navigation /> */}
+              {/* <div className='mainContent'> */}
+                <Component {...pageProps} />
+              {/* </div> */}
+            {/* </main> */}
+          {/* </div > */}
+      </ChakraProvider>
+    </AuthProvider>
   )
 
 }
