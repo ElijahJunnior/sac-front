@@ -11,6 +11,7 @@ import { AuthProvider } from '../contexts/AuthContext';
 function MyApp({ Component, pageProps }: AppProps) {
 
   return (
+    // provider de autenticação
     <AuthProvider>
       <ChakraProvider theme={theme} >
           {/* <div className="mainContainer"> */}
