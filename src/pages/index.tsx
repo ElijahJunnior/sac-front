@@ -1,6 +1,9 @@
 import { Box, Button, Flex, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, Text, VStack } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
-import { BiDotsHorizontalRounded } from 'react-icons/bi';
+import { ItemButton } from "../components/Dashboard/ItemButton";
+import { BiDotsHorizontalRounded, BiSearch  } from 'react-icons/bi';
+import { FiSend } from 'react-icons/fi'
+import { FaHeadset, FaPaperPlane, FaSearch, FaBinoculars } from 'react-icons/fa'
 
 // COMPONENTS
 import { ItemColumn } from "../components/Dashboard/ItemColumn";
@@ -29,7 +32,7 @@ export default function Home( { ocorrencias } : PageProps) {
           ocorrencias.map(ocorrencia => (
             <Flex 
               key={ocorrencia.id} 
-              w="100%" maxW="1000px" px="30px" py="24px" position="relative" 
+              w="100%" maxW="1000px" px="24px" py="20px" position="relative" 
               bg="gray.100" borderRadius="16px"
               boxShadow="0px 0px 15px 5px rgba(0, 0, 0, 0.1), 5px 5px 10px 1px rgba(0, 0, 0, 0.15);"
             >
@@ -60,29 +63,17 @@ export default function Home( { ocorrencias } : PageProps) {
                 <ItemLine title="Categoria" value={ocorrencia.descricao_categoria} />
                 <ItemLine title="Sub-Categoria" value={ocorrencia.descricao_sub_categoria} mt="10px" />
               </ItemColumn>
-              <Menu>
-                <MenuButton
-                  position="absolute" bottom="15px" right="15px"
-                  bg="orange.500" color='gray.300'
-                  outline="none"
-                  fontSize="22px" borderRadius='8px' border="none"
-                  boxShadow=" 0px 0px 2px 1px rgba(0, 0, 0, 0.20), 2px 3px 5px rgba(0, 0, 0, 0.25);"                  
-                  _hover={{ transform: 'scale(1.08)' }}
-                  _active={{ transform: 'scale(1.08)' }}
-                  // _focus={{ color: "orange.400" }}
-                  // _expanded={{ bg: 'blue.400' }}
-                  // transition='all 0.2s'
-                  transition='all 0.2s cubic-bezier(.08,.52,.52,1)'
-                >
-                  <Flex h='30px' w='30px' align="center" justify="center" >
-                    <BiDotsHorizontalRounded />
-                  </Flex>
-                </MenuButton>
-                <MenuList>
-                  <MenuItem>Iniciar atendimento</MenuItem>
-                  <MenuItem>Consultar ocorrencia</MenuItem>
-                </MenuList>
-              </Menu>
+              <Flex w="26px" ml="20px" flexDir="column" justify="space-between">
+                <ItemButton> 
+                  <FaHeadset />
+                </ItemButton>
+                <ItemButton> 
+                  <FaPaperPlane />
+                </ItemButton>
+                <ItemButton> 
+                  <FaBinoculars />
+                </ItemButton>
+              </Flex>
             </Flex>
           ))
         }
@@ -155,3 +146,30 @@ _active={{ bg: "orange.600", color: "gray.300" }}
 >
 <BiDotsHorizontalRounded />
 </Flex> */}
+
+// menu funcional 
+                {/* <Menu>
+                  <MenuButton
+                    // position="absolute" bottom="15px" right="15px"
+                    h='30px' w='30px'
+                    bg="orange.500" color='gray.300'
+                    outline="none"
+                    fontSize="22px" borderRadius='8px' border="none"
+                    boxShadow=" 0px 0px 2px 1px rgba(0, 0, 0, 0.20), 2px 3px 5px rgba(0, 0, 0, 0.25);"                  
+                    _hover={{ transform: 'scale(1.08)' }}
+                    _active={{ transform: 'scale(1.08)' }}
+                    // _focus={{ color: "orange.400" }}
+                    // _expanded={{ bg: 'blue.400' }}
+                    // transition='all 0.2s'
+                    transition='all 0.2s cubic-bezier(.08,.52,.52,1)'
+                  >
+                    <Flex align="center" justify="center" >
+                      <BiDotsHorizontalRounded />
+                    </Flex>
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem>Iniciar atendimento</MenuItem>
+                    <MenuItem>Consultar ocorrencia</MenuItem>
+                  </MenuList> 
+                </Menu >
+                */}
