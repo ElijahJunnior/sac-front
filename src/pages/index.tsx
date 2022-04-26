@@ -1,14 +1,21 @@
-import { Box, Button, Flex, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, Text, VStack } from "@chakra-ui/react";
+// REACT / NEXT 
 import { GetServerSideProps } from "next";
-import { ItemButton } from "../components/Dashboard/ItemButton";
-import { BiDotsHorizontalRounded, BiSearch  } from 'react-icons/bi';
-import { FiSend } from 'react-icons/fi'
-import { FaHeadset, FaPaperPlane, FaSearch, FaBinoculars } from 'react-icons/fa'
+
+// CHAKRA
+import { Flex, Heading, useDisclosure, VStack } from "@chakra-ui/react";
+
+// OTHERS LIBS
+import { FaHeadset, FaPaperPlane, FaBinoculars } from 'react-icons/fa';
 
 // COMPONENTS
-import { ItemColumn } from "../components/Dashboard/ItemColumn";
 import { ItemLine } from "../components/Dashboard/ItemLine";
+import { ItemColumn } from "../components/Dashboard/ItemColumn";
+import { ItemButton } from "../components/Dashboard/ItemButton";
+
+// API CONSUMS
 import { Ocorrencia, GetOcorrencias } from "../services/Ocorrencias";
+import { CommonButton } from "../components/CommonButton";
+import { CommonModal } from "../components/CommonModal";
 
 type PageProps = {
   ocorrencias: Partial<Ocorrencia>[]
@@ -16,6 +23,8 @@ type PageProps = {
 
 export default function Home( { ocorrencias } : PageProps) {
 
+  const { isOpen, onClose, onOpen } = useDisclosure(); 
+  
   if (!ocorrencias) {
     return (
       <Heading> Error on data loading </Heading>
@@ -24,9 +33,18 @@ export default function Home( { ocorrencias } : PageProps) {
 
   return (
     <>
-      <Heading>
-          Hello World
-      </Heading>
+      <Flex 
+        as={'header'} justify="space-between"
+        w="100%" maxW="1000px"
+        marginX="auto" my="24px"
+      >
+        <Heading>
+            Hello World
+        </Heading>
+        <CommonButton py="8px" px="12px" onClick={onOpen}>
+          Adicionar
+        </CommonButton>        
+      </Flex> 
       <VStack spacing="32px">
         {
           ocorrencias.map(ocorrencia => (
@@ -42,7 +60,7 @@ export default function Home( { ocorrencias } : PageProps) {
               </ItemColumn>
               <ItemColumn w="90px" ml="20px">
                 <ItemLine title="Prioridade" value={ocorrencia.descricao_prioridade} />
-                <ItemLine title="Providencias" value={(2).toString()} mt="10px" />
+                <ItemLine title="Providencias" value={ocorrencia.providencias.length.toString()} mt="10px" />
               </ItemColumn>
               <ItemColumn w="135px" ml="20px">
                 <ItemLine title="Status" value={ocorrencia.descricao_status} />
@@ -78,6 +96,7 @@ export default function Home( { ocorrencias } : PageProps) {
           ))
         }
       </VStack>
+      <CommonModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </>
   )
 }
@@ -93,83 +112,3 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
   }
 
 }
-
-{/*
-  <Menu>
-  <MenuButton
-    px={4}
-    py={2}
-    transition='all 0.2s'
-    borderRadius='md'
-    borderWidth='1px'
-    _hover={{ bg: 'gray.400' }}
-    _expanded={{ bg: 'blue.400' }}
-    _focus={{ boxShadow: 'outline' }}
-  >
-    File 
-  </MenuButton> 
-  <MenuButton
-    position="absolute" bottom="15px" right="15px"
-    bg="orange.500" color='gray.300'
-    outline="none"
-    fontSize="22px" borderRadius='8px' border="none"
-    boxShadow=" 0px 0px 2px 1px rgba(0, 0, 0, 0.20), 2px 3px 5px rgba(0, 0, 0, 0.25);"                  
-    _hover={{ transform: 'scale(1.1)' }}
-    // _active={{ bg: "orange.500", color: "gray.300" }}
-    // _focus={{ color: "orange.400" }}
-    // _expanded={{ bg: 'blue.400' }}
-    // transition='all 0.2s'
-    transition='all 0.2s cubic-bezier(.08,.52,.52,1)'
-  >
-    <Flex h='30px' w='30px' align="center" justify="center" >
-      <BiDotsHorizontalRounded />
-    </Flex>
-  </MenuButton>
-  <MenuList>
-    <MenuItem>Iniciar atendimento</MenuItem>
-    <MenuItem>Consultar ocorrencia</MenuItem>
-  </MenuList>
-  </Menu>
-*/}
-
-{/* <Flex
-h='30px' w='30px' align="center" justify="center"
-position="absolute" bottom="15px" right="15px"
-as='button' outline="none"
-bg="orange.500" color='gray.300'
-fontSize="22px" borderRadius='8px' border="none"
-boxShadow=" 0px 0px 2px 1px rgba(0, 0, 0, 0.20), 2px 3px 5px rgba(0, 0, 0, 0.25);"
-transition='all 0.2s cubic-bezier(.08,.52,.52,1)'
-// _focus={{ color: "orange.400" }}
-_hover={{ transform: 'scale(1.2)' }}
-_active={{ bg: "orange.600", color: "gray.300" }}
->
-<BiDotsHorizontalRounded />
-</Flex> */}
-
-// menu funcional 
-                {/* <Menu>
-                  <MenuButton
-                    // position="absolute" bottom="15px" right="15px"
-                    h='30px' w='30px'
-                    bg="orange.500" color='gray.300'
-                    outline="none"
-                    fontSize="22px" borderRadius='8px' border="none"
-                    boxShadow=" 0px 0px 2px 1px rgba(0, 0, 0, 0.20), 2px 3px 5px rgba(0, 0, 0, 0.25);"                  
-                    _hover={{ transform: 'scale(1.08)' }}
-                    _active={{ transform: 'scale(1.08)' }}
-                    // _focus={{ color: "orange.400" }}
-                    // _expanded={{ bg: 'blue.400' }}
-                    // transition='all 0.2s'
-                    transition='all 0.2s cubic-bezier(.08,.52,.52,1)'
-                  >
-                    <Flex align="center" justify="center" >
-                      <BiDotsHorizontalRounded />
-                    </Flex>
-                  </MenuButton>
-                  <MenuList>
-                    <MenuItem>Iniciar atendimento</MenuItem>
-                    <MenuItem>Consultar ocorrencia</MenuItem>
-                  </MenuList> 
-                </Menu >
-                */}

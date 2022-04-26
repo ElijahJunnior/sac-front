@@ -44,10 +44,10 @@ export async function GetOcorrencias() {
   const response = await api.get('ocorrencia/ListarAbertas');
   
   if (!response) {
-    return [] as Partial<Ocorrencia>[];
+    return [] as Ocorrencia[];
   }
     
-  const result: Partial<Ocorrencia>[] = response.data.reduce((acc, cur) => {
+  const result: Ocorrencia[] = response.data.reduce((acc, cur) => {
 
     cur.descricao = CapitalizeFirstLetter(cur.descricao);
     cur.descricao_categoria = CapitalizeFirstLetter(cur.descricao_categoria);
@@ -57,7 +57,18 @@ export async function GetOcorrencias() {
     cur.nome_sistema = CapitalizeFirstLetter(cur.nome_sistema);
     cur.descricao_status = handleOccurrenceStatus(cur);
     cur.descricao_prioridade = handlePriority(cur);
+    
+    cur.providencias = cur?.providencias.reduce((
+      acc: Ocorrencia[], cur: Ocorrencia
+    ) => { 
       
+      // elias_fazer : passar a formatar os dados das providencias 
+      acc.push(cur);
+      
+      return acc;
+
+    }, []) || [];
+    
     if (!!cur.data && cur.hora) {            
         
       const hora = Number(cur.hora.substring(0, Math.min(cur.hora.length, 2)));
@@ -142,6 +153,7 @@ export type Ocorrencia = {
   ultimo_tipo_ocorrencia: string, 
   ultima_data: string, 
   ultima_hora: string, 
+  providencias?: Providencia[], 
   cliente?: {
     id: string
     razao_social: string
@@ -163,4 +175,27 @@ export type Ocorrencia = {
   }
 }
 
+export type Providencia = { 
+  id: string, 
+  id_ocorrencia: string, 
+  usuario?: {
+    id: string,
+    nome: string
+  }, 
+  data_inicial: string, 
+  hora_inicial: string, 
+  descricao_providencia: string, 
+  codigo_solucao: string, 
+  tipo_providencia: string, 
+  status_providencia: string, 
+  codigo_prioridade: string, 
+  data_final: string, 
+  hora_final: string, 
+  usuario_agendamento?: {
+    id: string,
+    nome: string
+  }, 
+  data_agendamento: string, 
+  hora_agendamento: string  
+}
 

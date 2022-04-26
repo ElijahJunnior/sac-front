@@ -1,4 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
+import Router from 'next/router';
+import { setCookie } from 'nookies';
+import { api } from '../services/api';
 
 // Criando o contexto
 export const AuthContext = createContext({} as AuthContextData);
@@ -7,18 +10,48 @@ export const AuthContext = createContext({} as AuthContextData);
 export function AuthProvider({ children } : AuthContextProps) { 
  
   // cria um estado para o usuario logado 
-  const [userId, setUserId] = useState('');
+  const [user, setUser] = useState<User>(undefined);
 
   // cria a função de login
-  function signIn() { 
-    // fazer login e setar o usuario logado no estado user
-    setUserId('000001');
+  async function signIn({ username, password }: SignInCredentials) { 
+    
+    // executa consumo de login
+    const data = await api.post('sesseions', { 
+      username, 
+      password
+    }).then(res => res.data); 
+
+    // extrai o token e o refresh token
+    const { token, refreshToken, userId } = data;
+
+    setCookie(undefined, 'go2_sac.token', token, { 
+      maxAge: 60 * 60 * 24 * 30, // 30 dias
+      path: '/'
+    });
+
+    setCookie(undefined, 'go2_sac.refreshToken', refreshToken, { 
+      maxAge: 60 * 60 * 24 * 30, // 30 dias
+      path: '/'
+    });
+
+    setUser({
+      userId, 
+      username
+    });
+
+    Router.push('/');
+
+  }
+
+  function signOut() { 
+
   }
 
   // cria o objeto que será compartilhado pelo contexto
   const contextData : AuthContextData = { 
-    userId,
-    signIn
+    user,
+    signIn, 
+    signOut
   };
 
   // Retorna a provider com o conteudo do contexto
@@ -35,13 +68,25 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-// Tipo dos dados compartilhado pelo contexto
+// dados compartilhado pelo contexto
 type AuthContextData = {
-  userId: string
-  signIn(): void
+  user: User, 
+  signIn: (credentials: SignInCredentials) => Promise<void>, 
+  signOut: () => void, 
 }
 
-// tipo das propriedades recebidas pelo provider do contexto
+// propriedades recebidas pelo provider do contexto
 type AuthContextProps = { 
   children: ReactNode
+}
+
+// propriedades recebidas pela função SignIn
+type SignInCredentials = { 
+  username: string, 
+  password: string
+}
+
+type User = { 
+  userId: string, 
+  username: string 
 }
